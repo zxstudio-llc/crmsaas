@@ -1,5 +1,16 @@
-import { Link } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-react';
+import { 
+    LayoutGrid, 
+    Target, 
+    Users, 
+    Building2, 
+    FileText, 
+    Mail, 
+    Calendar, 
+    Package, 
+    Settings, 
+    Zap,
+    Warehouse
+} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -13,38 +24,80 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
-
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
-];
-
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: FolderGit2,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
-];
+import { usePage, Link } from '@inertiajs/react';
 
 export function AppSidebar() {
+    const { tenant } = usePage().props as any;
+
+    const mainNavItems: NavItem[] = [
+        {
+            title: 'Dashboard',
+            href: `/${tenant}/dashboard`,
+            icon: LayoutGrid,
+        },
+        {
+            title: 'Leads',
+            href: `/${tenant}/leads`,
+            icon: Target,
+        },
+        {
+            title: 'Persons',
+            href: `/${tenant}/persons`,
+            icon: Users,
+        },
+        {
+            title: 'Organizations',
+            href: `/${tenant}/organizations`,
+            icon: Building2,
+        },
+        {
+            title: 'Products',
+            href: `/${tenant}/products`,
+            icon: Package,
+        },
+        {
+            title: 'Quotes',
+            href: `/${tenant}/quotes`,
+            icon: FileText,
+        },
+        {
+            title: 'Activities',
+            href: `/${tenant}/activities`,
+            icon: Calendar,
+        },
+        {
+            title: 'Emails',
+            href: `/${tenant}/emails`,
+            icon: Mail,
+        },
+    ];
+
+    const footerNavItems: NavItem[] = [
+        {
+            title: 'Automation',
+            href: `/${tenant}/automation`,
+            icon: Zap,
+        },
+        {
+            title: 'Warehouses',
+            href: `/${tenant}/warehouses`,
+            icon: Warehouse,
+        },
+        {
+            title: 'Settings',
+            href: `/${tenant}/settings`,
+            icon: Settings,
+        },
+    ];
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                            <Link href={`/${tenant}/dashboard`} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>

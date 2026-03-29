@@ -28,6 +28,7 @@ class CreateNewUser implements CreatesNewUsers
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => $input['password'],
+            'tenant_id' => $input['tenant_id'] ?? request()->get('tenant_context')?->id,
         ]);
     }
 }
