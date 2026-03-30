@@ -14,13 +14,12 @@ use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\PipelineController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\OnboardingController;
-use App\Http\Middleware\AuthenticateTenant;
 use Inertia\Inertia;
 
 
 // Central / Home / Onboarding
 Route::get('/', function () {
-    return redirect()->route('onboarding.index');
+    return Inertia::render('welcome');
 })->name('home');
 
 Route::prefix('onboarding')->name('onboarding.')->group(function () {
@@ -29,13 +28,8 @@ Route::prefix('onboarding')->name('onboarding.')->group(function () {
 });
 
 // SaaS Tenant Context Routes
-Route::prefix('{tenant}')->middleware([AuthenticateTenant::class])->group(function () {
-    Route::get('dashboard', function () {
-            return Inertia::render('dashboard');
-        }
-        )->name('dashboard');
-
-        Route::middleware(['auth', 'verified'])->group(function () {
+Route::prefix('{tenant}')->middleware(['tenant.auth'])->group(function () {
+    Route::middleware(['auth', 'verified'])->group(function () {
             // Dashboard & Search
             Route::get('/dashboard', [DashboardController::class , 'index'])->name('tenant.dashboard');
             Route::get('/search', SearchController::class)->name('tenant.search');

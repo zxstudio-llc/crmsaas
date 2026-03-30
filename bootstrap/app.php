@@ -21,6 +21,15 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);
+
+        $middleware->alias([
+            'tenant.auth' => AuthenticateTenant::class,
+            // 'tenant.active' => EnsureTenantIsActive::class,
+            // 'tenant.provisions' => CheckTenantProvisions::class,
+            // 'no.tenant' => \App\Http\Middleware\RedirectIfTenantContext::class,
+            // 'force.password.change' => \App\Http\Middleware\ForcePasswordChange::class,
+        ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

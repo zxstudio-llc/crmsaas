@@ -2,10 +2,10 @@ import React from 'react';
 import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
-    Users, 
-    TrendingUp, 
-    Briefcase, 
+import {
+    Users,
+    TrendingUp,
+    Briefcase,
     DollarSign,
     ArrowUpRight,
     Search
@@ -26,7 +26,7 @@ export default function Dashboard({ stats, recent_leads }: Props) {
     return (
         <AppLayout>
             <Head title="CRM Dashboard" />
-            
+
             <div className="flex flex-col gap-8 p-8">
                 <header className="flex flex-col gap-2">
                     <h1 className="text-3xl font-bold tracking-tight">Executive Dashboard</h1>
