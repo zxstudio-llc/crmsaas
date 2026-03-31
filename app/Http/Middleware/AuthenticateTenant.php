@@ -4,46 +4,33 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
-use App\Models\Tenant;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthenticateTenant
 {
+    /**
+     * Handle an incoming request.
+     *
+     * @param  Closure(Request): (Response)  $next
+     */
     public function handle(Request $request, Closure $next): Response
     {
-        $tenantSlug = $request->route('tenant');
+        if (! Auth::check()) {
+            // Intentar obtener el slug del parámetro de la ruta
+            $tenantSlug = $request->route('tenant');
 
-        if (!$tenantSlug) {
-            return redirect()->route('onboarding.index');
-        }
-
-        $tenant = Tenant::where('slug', $tenantSlug)->first();
-
-        if (!$tenant) {
-            abort(404, 'Workspace not found');
-        }
-
-        // Bind tenant to request for easy access in controllers and TenantScoped trait
-        $request->merge(['tenant_context' => $tenant]);
-
-        // If user is authenticated, ensure they belong to this tenant
-        if (Auth::check()) {
-            $user = Auth::user();
-
-            if ($user->tenant_id !== $tenant->id) {
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-
-                return redirect()->route('login')
-                    ->with('error', 'You do not have access to this workspace.');
+            // Si el parámetro es un objeto (Binding), extraemos el slug
+            if (is_object($tenantSlug)) {
+                $tenantSlug = $tenantSlug->slug ?? $tenantSlug->id;
             }
-        }
-        else {
-            // Not logged in — redirect to login
-            return redirect()->route('login')
-                ->with('intended', $request->url());
+
+            // Si por alguna razón no hay slug en la URL, enviamos al login central
+            if (! $tenantSlug) {
+                return redirect()->route('auth.sign-in.show');
+            }
+
+            return redirect()->route('tenant.login', ['tenant' => $tenantSlug]);
         }
 
         return $next($request);

@@ -2,14 +2,71 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Stancl\Tenancy\Contracts\TenantWithDatabase;
+use Stancl\Tenancy\Database\Concerns\HasDatabase;
+use Stancl\Tenancy\Database\Concerns\HasDomains;
+use Stancl\Tenancy\Database\Models\Tenant as BaseTenant;
 
-class Tenant extends Model
+class Tenant extends BaseTenant implements TenantWithDatabase
 {
-    protected $fillable = ['name', 'slug', 'email', 'plan', 'trial_ends_at'];
+    use HasDatabase, HasDomains, HasUuids;
 
-    public function users()
+    protected $fillable = [
+        'id',
+        'slug',
+        'database',
+        'status',
+        'company_name',
+        'data',
+    ];
+
+    public static function getCustomColumns(): array
     {
-        return $this->hasMany(User::class);
+        return [
+            'id',
+            'slug',
+            'database',
+            'status',
+            'company_name',
+        ];
+    }
+
+    protected $casts = [
+        'data' => 'array',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    public function subscription(): HasOne
+    {
+        return $this->hasOne(Subscription::class);
+    }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === 'active';
+    }
+
+    public function suspend(): void
+    {
+        $this->update(['status' => 'suspended']);
+    }
+
+    public function activate(): void
+    {
+        $this->update(['status' => 'active']);
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
     }
 }

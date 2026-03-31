@@ -34,11 +34,12 @@ const defaultFormData: OnboardingFormData = {
     invite_emails: ['', ''],
     password: '',
     password_confirmation: '',
+    plan_id: '',
 };
 
 // ─── Main ──────────────────────────────────────────────────────────────────────
 
-export default function OnboardingIndex() {
+export default function OnboardingIndex({ plans = [] }: { plans?: any[] }) {
     const [step, setStep] = useState<Step>(1);
     const [processing, setProcessing] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -58,15 +59,17 @@ export default function OnboardingIndex() {
         setErrors({});
 
         router.post(
-            '/onboarding',
+            '/onboarding/signup',
             {
                 organization_name: formData.company_name || 'My Workspace',
                 slug: formData.workspace_handle || 'my-workspace',
                 admin_name: `${formData.first_name} ${formData.last_name}`.trim() || 'User',
                 email: formData.email,
-                password: formData.password || 'Password123!',
-                password_confirmation: formData.password_confirmation || 'Password123!',
-                plan: 'free',
+                password: formData.password,
+                password_confirmation: formData.password_confirmation,
+                plan_id: formData.plan_id,
+                // Collaborator invite emails (filtered empty strings on the backend)
+                invite_emails: formData.invite_emails.filter(e => e.trim() !== ''),
             },
             {
                 onError: errs => { setErrors(errs); setProcessing(false); },
@@ -85,7 +88,7 @@ export default function OnboardingIndex() {
 
     return (
         <>
-            <Head title="Setup your workspace – Crmsales" />
+            <Head title="Setup your workspace – Freshsales" />
 
             {/* Outer centering wrapper — OnboardingLayout provides the page shell */}
             <div className="flex flex-1 items-center justify-center px-4">
@@ -143,6 +146,7 @@ export default function OnboardingIndex() {
                                         onSubmit={handleSubmit}
                                         processing={processing}
                                         errors={errors}
+                                        plans={plans}
                                     />
                                 )}
                             </ScrollArea>

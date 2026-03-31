@@ -159,7 +159,7 @@ export default function Welcome() {
                         </p>
 
                         <div style={{ display: 'flex', gap: '16px', marginTop: '4px' }}>
-                            <Link href="/onboarding" style={{ fontSize: '13px', color: '#666', textDecoration: 'none', borderBottom: '1px solid #ddd' }}>
+                            <Link href="/onboarding/plans" style={{ fontSize: '13px', color: '#666', textDecoration: 'none', borderBottom: '1px solid #ddd' }}>
                                 Create account
                             </Link>
                         </div>

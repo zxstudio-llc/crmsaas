@@ -18,6 +18,7 @@ export interface OnboardingFormData {
     invite_emails: string[];
     password: string;
     password_confirmation: string;
+    plan_id: string;
 }
 
 export const COUNTRIES = [

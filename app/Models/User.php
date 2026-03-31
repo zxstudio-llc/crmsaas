@@ -14,6 +14,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
 
     protected $fillable = [
+        'tenant_id',
         'name',
         'email',
         'password',
@@ -54,6 +55,11 @@ class User extends Authenticatable
 
     public function getAvatarAttribute()
     {
-        return $this->image ? asset('storage/' . $this->image) : null;
+        return $this->image ? asset('storage/'.$this->image) : null;
+    }
+
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
     }
 }
