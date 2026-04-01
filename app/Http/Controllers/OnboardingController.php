@@ -67,7 +67,7 @@ class OnboardingController extends Controller
             'name' => $validated['organization_name'],
             'slug' => $slug,
             'email' => $validated['email'],
-            'database' => 'crm_' . str_replace('-', '_', $slug),
+            'database' => 'crm' . str_replace('-', '_', $slug),
             'status' => 'provisioning',
         ]);
 
@@ -140,7 +140,7 @@ class OnboardingController extends Controller
         $email = $request->query('email');
         $tempPassword = $request->query('tempPassword');
 
-        return Inertia::render('onboarding/provisioning', [
+        return Inertia::render('Onboarding/Provisioning', [
             'tenant' => $tenant,
             'email' => $email,
             'tempPassword' => $tempPassword,

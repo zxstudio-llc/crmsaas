@@ -48,7 +48,7 @@ return new class extends Migration
             $table->date('date_value')->nullable();
             $table->json('json_value')->nullable();
             $table->foreignId('attribute_id')->constrained()->onDelete('cascade');
-
+            
             $table->index(['entity_id', 'entity_type']);
             $table->timestamps();
         });

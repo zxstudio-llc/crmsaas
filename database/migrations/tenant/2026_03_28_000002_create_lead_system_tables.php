@@ -55,7 +55,7 @@ return new class extends Migration
             $table->text('lost_reason')->nullable();
             $table->date('expected_close_date')->nullable();
             $table->datetime('closed_at')->nullable();
-
+            
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->unsignedBigInteger('person_id')->nullable(); // Will link later
 
@@ -63,7 +63,7 @@ return new class extends Migration
             $table->foreignId('lead_type_id')->nullable()->constrained()->onDelete('set null');
             $table->foreignId('lead_pipeline_id')->constrained()->onDelete('cascade');
             $table->foreignId('lead_pipeline_stage_id')->constrained()->onDelete('cascade');
-
+            
             $table->timestamps();
 
             // Optimización de consultas: Índices en campos clave
